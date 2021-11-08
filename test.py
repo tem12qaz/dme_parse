@@ -13,7 +13,7 @@ prefs = {"profile.managed_default_content_settings.images": 2}
 options.add_experimental_option("prefs", prefs)
 driver = webdriver.Chrome(
     options=options,
-    executable_path="/home/ubuntu/code/parse/project_parse/chromedriver"
+    executable_path="/home/ubuntu/code/dme_parse/chromedriver"
 )
 display = Display(visible=0, size=(640, 480))
 display.start()
