@@ -5,7 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup as bs4
 
-from config import TIME_SLEEP
+from config import TIME_SLEEP, CHROMEDRIVER_PATH
 from flask_app_init import db
 from mail import send_mail
 from models import Invoice
@@ -26,7 +26,7 @@ def driver_init():
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(
         options=options,
-        executable_path="/home/ubuntu/code/dme_parse/chromedriver"
+        executable_path=CHROMEDRIVER_PATH
     )
     display = Display(visible=0, size=(640, 480))
     display.start()

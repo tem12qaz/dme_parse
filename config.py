@@ -21,6 +21,7 @@ EMAIL_PORT = 465
 # время между проверками накладных
 TIME_SLEEP = 3600
 
+CHROMEDRIVER_PATH = "/home/root/code/dme_parse/chromedriver"
 
 class Configuration(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
