@@ -1,28 +1,18 @@
-import asyncio
-import time
-from threading import Thread
+from pyvirtualdisplay import Display
+from selenium import webdriver
 
-main_loop = asyncio.new_event_loop()
-
-
-def g():
-    global main_loop
-    for i in range(4):
-        main_loop.create_task(e())
-
-
-async def e():
-    await asyncio.sleep(1)
-    print('erferferferf')
-
-
-
-async def main():
-    for i in range(10):
-        if i == 2:
-            Thread(target=g, args=()).run()
-        await asyncio.sleep(1)
-        print('wed')
-
-main_loop.run_until_complete(main())
-
+options = webdriver.ChromeOptions()
+options.add_argument("--headless")
+options.add_argument("--disable-blink-features")
+options.add_argument("--disable-blink-features=AutomationControlled")
+options.add_experimental_option("excludeSwitches", ["enable-automation"])
+options.add_experimental_option("excludeSwitches", ["disable-popup-blocking"])
+options.add_experimental_option('useAutomationExtension', False)
+# options.add_argument("start-maximized")
+prefs = {"profile.managed_default_content_settings.images": 2}
+options.add_experimental_option("prefs", prefs)
+driver = webdriver.Chrome(options=options)
+display = Display(visible=0, size=(640, 480))
+display.start()
+driver.get('https://www.google.ru/')
+print(driver.page_source)
