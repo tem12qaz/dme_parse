@@ -1,8 +1,8 @@
 # данные подключения к бд
-PG_USER = ''
-PG_PASSWORD = ''
+PG_USER = 'dme_parse'
+PG_PASSWORD = 'in9df879!#uihhb932B@8'
 PG_HOST = ''
-PG_DATABASE = ''
+PG_DATABASE = 'dme_parse'
 
 # тексты сообщений
 status_messages = {
