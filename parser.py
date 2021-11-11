@@ -1,4 +1,5 @@
 import time
+import traceback
 
 from pyvirtualdisplay import Display
 from selenium import webdriver
@@ -30,14 +31,14 @@ def driver_init():
         options=options,
         executable_path=CHROMEDRIVER_PATH
     )
-    display = Display(visible=0, size=(640, 480))
-    display.start()
+    #display = Display(visible=0, size=(640, 480))
+    #display.start()
     return driver
 
 
 def get_status(status_text: str, departure_time: str):
     if status_text == 'Комплектация на рейс/Груз принят к перевозке':
-        if departure_time == '':
+        if departure_time == ' ':
             return 1
         else:
             return 2
@@ -49,9 +50,9 @@ def get_status(status_text: str, departure_time: str):
 
 def get_result(driver: webdriver.Chrome, number: str):
     driver.get(url)
-    driver.find_element(by=By.ID, value='NumberFirstPart').send_keys(number[:3])
-    driver.find_element(by=By.ID, value='NumberSecondPart').send_keys(number[3:])
-    driver.find_element(by=By.CLASS_NAME, value='submit w155').click()
+    driver.find_element(by=By.ID, value='NumberFirstPart').send_keys(number.split('-')[0])
+    driver.find_element(by=By.ID, value='NumberSecondPart').send_keys(number.split('-')[1])
+    driver.find_element(by=By.CLASS_NAME, value='w155').click()
 
     time.sleep(2)
 
@@ -70,26 +71,31 @@ def get_result(driver: webdriver.Chrome, number: str):
 
 def parse_all():
     invoices = Invoice.query.all()
-    driver, display = driver_init()
+    driver = driver_init()
 
     for invoice in invoices:
-        to, status, departure_time, place, weight = get_result(driver, invoice.number)
-        status = get_status(status, departure_time)
+        print(invoice.number, flush=True)
+        try:
+            to, status, departure_time, place, weight = get_result(driver, invoice.number)
+            status = get_status(status, departure_time)
 
-        if invoice.status == status:
-            continue
+            if invoice.status == status:
+                continue
 
-        send_mail(invoice.email, status, (place, weight, to))
+            send_mail(invoice.email, status, (place, weight, to))
 
-        if status == 3:
-            db.session.delete(invoice)
-        else:
-            invoice.status = status
+            if status == 3:
+                db.session.delete(invoice)
+            else:
+                invoice.status = status
 
-        db.session.commit()
+            db.session.commit()
+        except Exception as e:
+            print(traceback.format_exc(), flush=True)
+            pass
 
     driver.close()
-    display.stop()
+    #display.stop()
 
 
 def parse_cycle():

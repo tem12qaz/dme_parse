@@ -9,7 +9,7 @@ from config import EMAIL_ADDRESS, EMAIL_HOST, EMAIL_PASSWORD, EMAIL_SUBJECT, \
 
 
 def send_mail(email_to, status, data, email_from=EMAIL_ADDRESS, subject=EMAIL_SUBJECT):
-    email_to = EMAIL_ADDRESS + email_to
+    email_to = [EMAIL_ADDRESS] + [email_to]
 
     text = status_messages[status].format(place=data[0], weight=data[1], to=data[2])
 
@@ -24,5 +24,5 @@ def send_mail(email_to, status, data, email_from=EMAIL_ADDRESS, subject=EMAIL_SU
     server = smtplib.SMTP_SSL(EMAIL_HOST, EMAIL_PORT)
     server.ehlo()
     server.login(email_from, EMAIL_PASSWORD)
-    server.sendmail(email_from, email_to, msg.as_string())
+    server.sendmail(email_from, email_to, msg.as_string().encode('utf-8'))
     server.close()

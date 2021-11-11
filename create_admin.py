@@ -1,5 +1,5 @@
-from flask_app import db
-from flask_app import user_datastore
+from app import db
+from app import user_datastore
 from models import Role, User
 
 email = input('email: ')

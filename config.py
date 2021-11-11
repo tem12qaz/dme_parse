@@ -1,27 +1,27 @@
 # данные подключения к бд
 PG_USER = 'dme_parse'
 PG_PASSWORD = 'in9df879!#uihhb932B@8'
-PG_HOST = ''
+PG_HOST = 'localhost:5432'
 PG_DATABASE = 'dme_parse'
 
 # тексты сообщений
 status_messages = {
-    1: 'Ваш груз, мест={place}, вес={weight}кг прошёл оформление авиа перевозки в {to}',
+    1: 'Ваш груз, мест={place}, вес={weight}кг прошёл оформление авиа перевозки{to}',
     2: 'Ваш груз, мест={place}, вес={weight}кг готов к загрузке в ВС для авиа перевозки в {to}',
     3: 'Ваш груз, мест={place}, вес={weight}кг вылетел в {to}'
 }
 
 # данные email
-EMAIL_ADDRESS = ''
-EMAIL_PASSWORD = ''
+EMAIL_ADDRESS = 'tem12qaz@yandex.ru'
+EMAIL_PASSWORD = 'xwtapxohafbgujhl'
 EMAIL_SUBJECT = 'Информация о грузе'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 
 # время между проверками накладных
-TIME_SLEEP = 3600
+TIME_SLEEP = 180
 
-CHROMEDRIVER_PATH = "/home/root/code/dme_parse/chromedriver"
+CHROMEDRIVER_PATH = "/root/code/dme_parse/chromedriver"
 
 class Configuration(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
