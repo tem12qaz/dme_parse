@@ -26,6 +26,6 @@ class Role(db.Model, RoleMixin):
 class Invoice(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     number = db.Column(db.String(16))
-    email = db.Column(db.String(128))
+    email = db.Column(db.String(1024))
     status = db.Column(db.Integer(), default=0)
 

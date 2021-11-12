@@ -82,7 +82,7 @@ def parse_all():
             if invoice.status == status:
                 continue
 
-            send_mail(invoice.email, status, (place, weight, to))
+            send_mail(invoice.email.split(' '), status, (place, weight, to))
 
             if status == 3:
                 db.session.delete(invoice)
