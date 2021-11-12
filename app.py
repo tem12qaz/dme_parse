@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-from flask import request, flash, url_for
+from flask import request, flash, url_for, redirect
 from flask_login import login_required
 from flask_migrate import Migrate
 from flask_script import Manager
@@ -9,7 +9,6 @@ from flask_admin import Admin
 
 from flask_security import SQLAlchemyUserDatastore
 from flask_security import Security
-from werkzeug.utils import redirect
 
 from flask_app_init import app, db
 
@@ -25,20 +24,28 @@ def upload():
     if request.method == 'POST':
         file = request.files['file']
         if file and '.xlsx' in file.filename:
+            file.save(file.filename)
             try:
-                df = pd.read_excel(file.filename, sheetname=0)
-                for row in df['column name'].tolist():
-                    invoice = Invoice(number=row[0], email=row[1])
+                df = pd.read_excel(file.filename)
+                df.to_csv("table.csv", index=None, header=True, sep=';', na_rep='-')
+                with open('table.csv', 'r', encoding='utf-8') as f:
+                    for row in f:
+                        row = row.split(';')
+                        invoice = Invoice(number=row[0], email=row[1])
 
-                db.session.add(invoice)
-                db.session.commit()
+                        db.session.add(invoice)
+                        db.session.commit()
+                flash("Файл загружен")
+
+                os.remove(file.filename)
+                os.remove('table.csv')
 
             except FileNotFoundError as e:
                 flash("Ошибка чтения файла", "error")
         else:
             flash("Ошибка чтения файла", "error")
 
-    return redirect(url_for('admin/invoice'))
+    return redirect(url_for('admin.index'))
 
 
 # FLASK-ADMIN

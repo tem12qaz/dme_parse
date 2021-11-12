@@ -5,13 +5,13 @@ from email.utils import formatdate
 
 
 from config import EMAIL_ADDRESS, EMAIL_HOST, EMAIL_PASSWORD, EMAIL_SUBJECT, \
-    EMAIL_PORT, status_messages
+    EMAIL_PORT, status_messages, SIGN
 
 
 def send_mail(email_to, status, data, email_from=EMAIL_ADDRESS, subject=EMAIL_SUBJECT):
     email_to = [EMAIL_ADDRESS] + [email_to]
 
-    text = status_messages[status].format(place=data[0], weight=data[1], to=data[2])
+    text = status_messages[status].format(place=data[0], weight=data[1], to=data[2].split('->')[1])# + SIGN
 
     msg = MIMEMultipart()
     msg['From'] = email_from

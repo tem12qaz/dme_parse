@@ -11,10 +11,14 @@ status_messages = {
     3: 'Ваш груз, мест={place}, вес={weight}кг вылетел в {to}'
 }
 
+SIGN = '''
+
+'''
+
 # данные email
 EMAIL_ADDRESS = 'tem12qaz@yandex.ru'
-EMAIL_PASSWORD = 'xwtapxohafbgujhl'
-EMAIL_SUBJECT = 'Информация о грузе'
+EMAIL_PASSWORD = 'qsiwiqfbxvdwtzbe'
+EMAIL_SUBJECT = 'Информация о статусе авиа грузоперевозки'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 
@@ -29,7 +33,7 @@ class Configuration(object):
     SQLALCHEMY_DATABASE_URI = f'postgresql+psycopg2://{PG_USER}:{PG_PASSWORD}@{PG_HOST}/{PG_DATABASE}'
     SQLALCHEMY_POOL_SIZE = 1
 
-    SECRET_KEY = 'something very secret'
+    SECRET_KEY = 'someth3489rh6&r65r^R#2$%GkBHJKN98 secret'
 
     SECURITY_PASSWORD_SALT = 'salt'
     SECURITY_PASSWORD_HASH = 'sha512_crypt'

@@ -99,6 +99,7 @@ def parse_all():
 
 
 def parse_cycle():
-    parse_all()
-    time.sleep(TIME_SLEEP)
+    while True:
+        parse_all()
+        time.sleep(TIME_SLEEP)
 
