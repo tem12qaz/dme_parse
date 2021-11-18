@@ -16,20 +16,22 @@ url = 'https://business.dme.ru/cargo/'
 
 def driver_init():
     options = webdriver.ChromeOptions()
-    options.add_argument('--no-sandbox')
+    #options.binary_location = "/usr/bin/chromium-browser"
     options.add_argument("--headless")
+    options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
+    options.add_argument("--disable-gpu")
     options.add_argument("--disable-blink-features")
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option("excludeSwitches", ["disable-popup-blocking"])
     options.add_experimental_option('useAutomationExtension', False)
-    # options.add_argument("start-maximized")
+    options.add_argument("start-maximized")
     prefs = {"profile.managed_default_content_settings.images": 2}
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(
         options=options,
-        executable_path=CHROMEDRIVER_PATH
+        #executable_path=CHROMEDRIVER_PATH
     )
     #display = Display(visible=0, size=(640, 480))
     #display.start()
@@ -72,27 +74,37 @@ def get_result(driver: webdriver.Chrome, number: str):
 def parse_all():
     invoices = Invoice.query.all()
     driver = driver_init()
+    exc = 0
 
     for invoice in invoices:
-        print(invoice.number, flush=True)
-        try:
-            to, status, departure_time, place, weight = get_result(driver, invoice.number)
-            status = get_status(status, departure_time)
+        time.sleep(10)
+        while exc < 2:
+            print(invoice.number, flush=True)
+            try:
+                to, status, departure_time, place, weight = get_result(driver, invoice.number)
+                status = get_status(status, departure_time)
+                
+                print(to, status, departure_time, place, weight, flush=True)
 
-            if invoice.status == status:
-                continue
+                if invoice.status == status:
+                    break
 
-            send_mail(invoice.email.split(' '), status, (place, weight, to))
+                send_mail(invoice.email.split(' '), status, (place, weight, to))
 
-            if status == 3:
-                db.session.delete(invoice)
+                if status == 3:
+                    db.session.delete(invoice)
+                else:
+                    invoice.status = status
+
+                db.session.commit()
+            except Exception as e:
+                print(traceback.format_exc(), flush=True)
+
+                exc += 1
+                time.sleep(6)
             else:
-                invoice.status = status
-
-            db.session.commit()
-        except Exception as e:
-            print(traceback.format_exc(), flush=True)
-            pass
+                exc = 0
+                break
 
     driver.close()
     #display.stop()

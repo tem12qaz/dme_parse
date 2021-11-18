@@ -4,7 +4,7 @@ import pandas as pd
 from flask import request, flash, url_for, redirect
 from flask_login import login_required
 from flask_migrate import Migrate
-from flask_script import Manager
+#from flask_script import Manager
 from flask_admin import Admin
 
 from flask_security import SQLAlchemyUserDatastore
@@ -15,7 +15,7 @@ from flask_app_init import app, db
 MIGRATION_DIR = os.path.join('admin', 'migrations')
 
 migrate = Migrate(app, db, directory=MIGRATION_DIR)
-manager = Manager(app)
+#manager = Manager(app)
 
 
 @app.route('/upload', methods=["POST", "GET"])

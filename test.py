@@ -131,7 +131,7 @@ COOKIES = {
 
 
 def parse(url):
-    driver_display = init_chrome()
+    driver_display = init_chrome(headless=True)
 
     if len(driver_display) == 2:
         driver, display = driver_display

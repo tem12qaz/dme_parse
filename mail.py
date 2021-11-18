@@ -12,12 +12,12 @@ from config import EMAIL_ADDRESS, EMAIL_HOST, EMAIL_PASSWORD, EMAIL_SUBJECT, \
 def send_mail(email_to, status, data, email_from=EMAIL_ADDRESS, subject=EMAIL_SUBJECT):
     email_to = [EMAIL_ADDRESS] + email_to
 
-    text = status_messages[status].format(place=data[0], weight=data[1], to=data[2].split('->')[1])
+    text = status_messages[status].format(place=data[0], weight=data[1], to=data[2].split('->')[-1])
 
     if status == 1 or status == 2:
         text_2 = 'Ожидайте следующее сообщение о ходе Вашей авиа перевозки...'
     else:
-        text_2 = '''Ожидайте звонок оператора грузового терминала о готовности Вашего груза к выдаче.<br><br>Обращаем Ваше внимание, на то что грузовой терминал Вашего города при получении груза может взымать терминальный сбор в соответствии с тарифами грузового терминала.<br><br><br>Перевозка завершена!  '''
+        text_2 = '''Ожидайте звонок оператора грузового терминала о готовности Вашего груза к выдаче.<br><br>Обращаем Ваше внимание, на то что грузовой терминал Вашего города при получении груза может взимать терминальный сбор в соответствии с тарифами грузового терминала.<br><br><br>Перевозка завершена!  '''
 
     msg = MIMEMultipart()
     msg['From'] = email_from
@@ -30,6 +30,7 @@ def send_mail(email_to, status, data, email_from=EMAIL_ADDRESS, subject=EMAIL_SU
       <head></head>
         <body>
            <span style="color:#1f497d;font-family:'georgia' , serif;font-size:14pt">{text}</span>
+           <br>
            <span style="color:#1f497d;font-family:'georgia' , serif;font-size:14pt">{text_2}</span>
            <br>
            <br>
@@ -63,5 +64,3 @@ def send_mail(email_to, status, data, email_from=EMAIL_ADDRESS, subject=EMAIL_SU
     server.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
     server.sendmail(email_from, email_to, msg.as_string().encode('utf-8'))
     server.close()
-
-send_mail(['yakshamlar@rambler.ru'], 3, ('test', 'test', 'test->test'))

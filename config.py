@@ -1,14 +1,14 @@
 # данные подключения к бд
 PG_USER = 'dme_parse'
-PG_PASSWORD = 'in9df879!#uihhb932B@8'
+PG_PASSWORD = 'in9df879!#uihhb932B8'
 PG_HOST = 'localhost:5432'
 PG_DATABASE = 'dme_parse'
 
 # тексты сообщений
 status_messages = {
-    1: '''Ваш груз, мест={place}, вес={weight}кг прошёл оформление авиа перевозки{to}''',
-    2: '''Ваш груз, мест={place}, вес={weight}кг готов к загрузке в ВС для авиа перевозки в {to}''',
-    3: 'Ваш груз, мест={place}, вес={weight}кг вылетел в {to}'
+    1: '''Ваш груз, мест={place}, вес={weight}кг прошёл оформление авиа перевозки{to}.''',
+    2: '''Ваш груз, мест={place}, вес={weight}кг готов к загрузке в ВС для авиа перевозки в {to}.''',
+    3: 'Ваш груз, мест={place}, вес={weight}кг вылетел в {to}.'
 }
 
 SIGN = '''
@@ -25,7 +25,7 @@ EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 
 # время между проверками накладных
-TIME_SLEEP = 180
+TIME_SLEEP = 600
 
 CHROMEDRIVER_PATH = "/root/code/dme_parse/chromedriver"
 
