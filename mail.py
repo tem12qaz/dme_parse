@@ -6,7 +6,8 @@ from email.utils import formatdate
 
 
 from config import EMAIL_ADDRESS, EMAIL_HOST, EMAIL_PASSWORD, EMAIL_SUBJECT, \
-    EMAIL_PORT, status_messages, SIGN, SIGN_2
+    EMAIL_PORT
+from text import status_messages, TEXT_2_1, TEXT_2_2, SIGN, SIGN_2, HTML
 
 
 def send_mail(email_to, status, data, email_from=EMAIL_ADDRESS, subject=EMAIL_SUBJECT):
@@ -15,9 +16,9 @@ def send_mail(email_to, status, data, email_from=EMAIL_ADDRESS, subject=EMAIL_SU
     text = status_messages[status].format(place=data[0], weight=data[1], to=data[2].split('->')[-1])
 
     if status == 1 or status == 2:
-        text_2 = 'Ожидайте следующее сообщение о ходе Вашей авиа перевозки...'
+        text_2 = TEXT_2_1
     else:
-        text_2 = '''Ожидайте звонок оператора грузового терминала о готовности Вашего груза к выдаче.<br><br>Обращаем Ваше внимание, на то что грузовой терминал Вашего города при получении груза может взимать терминальный сбор в соответствии с тарифами грузового терминала.<br><br><br>Перевозка завершена!  '''
+        text_2 = TEXT_2_2
 
     msg = MIMEMultipart()
     msg['From'] = email_from
@@ -25,25 +26,7 @@ def send_mail(email_to, status, data, email_from=EMAIL_ADDRESS, subject=EMAIL_SU
     msg['Date'] = formatdate(localtime=True)
     msg['Subject'] = subject
 
-    html = f"""\
-    <html>
-      <head></head>
-        <body>
-           <span style="color:#1f497d;font-family:'georgia' , serif;font-size:14pt">{text}</span>
-           <br>
-           <span style="color:#1f497d;font-family:'georgia' , serif;font-size:14pt">{text_2}</span>
-           <br>
-           <br>
-           <br>
-           <span style="color:#1f497d;font-family:'georgia' , serif;font-size:10pt">{SIGN}</span>
-           <br>
-           <span style="color:#1f497d;font-family:'georgia' , serif;font-size:10pt">{SIGN_2}</span>
-           <br>
-           <br>
-           <img src="cid:image1" alt="Logo" style="width:288px;height:150px;"><br>          
-        </body>
-    </html>
-    """
+    html = HTML.format(text=text, text_2=text_2, SIGN=SIGN, SIGN_2=SIGN_2)
     # Record the MIME types of text/html.
     part2 = MIMEText(html, 'html')
 

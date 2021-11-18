@@ -4,19 +4,6 @@ PG_PASSWORD = 'in9df879!#uihhb932B8'
 PG_HOST = 'localhost:5432'
 PG_DATABASE = 'dme_parse'
 
-# тексты сообщений
-status_messages = {
-    1: '''Ваш груз, мест={place}, вес={weight}кг прошёл оформление авиа перевозки{to}.''',
-    2: '''Ваш груз, мест={place}, вес={weight}кг готов к загрузке в ВС для авиа перевозки в {to}.''',
-    3: 'Ваш груз, мест={place}, вес={weight}кг вылетел в {to}.'
-}
-
-SIGN = '''
-С уважением , ООО “ВТК” | Авиа грузоперевозки по России |
-'''
-
-SIGN_2 = '''http://vtcargo.ru | e-mail: moscow@vtcargo.ru | тел.: +7 (495) 972-95-62 |'''
-
 # данные email
 EMAIL_ADDRESS = 'vtcargo@awbtrack.online'
 EMAIL_PASSWORD = 'ejxissciqcumhcvw'
