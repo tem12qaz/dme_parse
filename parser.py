@@ -67,6 +67,7 @@ def get_result(driver: webdriver.Chrome, number: str):
     departure_time = params[3].text
     place = params[5].text
     weight = params[6].text
+    print(to, status, departure_time, place, weight)
 
     return to, status, departure_time, place, weight
 
@@ -77,7 +78,8 @@ def parse_all():
     exc = 0
 
     for invoice in invoices:
-        time.sleep(10)
+        time.sleep(20)
+        exc = 0
         while exc < 2:
             print(invoice.number, flush=True)
             try:
