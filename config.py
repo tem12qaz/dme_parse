@@ -12,7 +12,7 @@ EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
 
 # время между проверками накладных
-TIME_SLEEP = 600
+TIME_SLEEP = 1200
 
 CHROMEDRIVER_PATH = "/root/code/dme_parse/chromedriver"
 
