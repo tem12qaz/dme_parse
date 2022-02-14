@@ -39,7 +39,13 @@ def upload():
                             invoice.place += f' {row[2].replace(".0", "")}'
                             invoice.weight += f' {row[3]}'
                         else:
-                            invoice = Invoice(number=row[0], email=row[1], place=row[2], weight=row[3])
+                            invoice = Invoice(
+                                number=row[0],
+                                email=row[1],
+                                place=row[2].replace(".0", ""),
+                                weight=row[3]
+                            )
+
                             db.session.add(invoice)
                         db.session.commit()
                 flash("Файл загружен")
