@@ -92,10 +92,11 @@ def parse_all():
                     break
 
                 for i in range(len(invoice.email.split(' '))):
+                    print('-------')
                     send_mail(
                         [invoice.email.split(' ')[i]],
                         status,
-                        (invoice.place.split(' ')[i], invoice.weight.split(' ')[i], to)
+                        (str(invoice.place.split(' ')[i]), str(invoice.weight.split(' ')[i]), to)
                     )
 
                 if status == 3:
