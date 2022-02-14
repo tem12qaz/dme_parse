@@ -36,7 +36,7 @@ def upload():
                         invoice = Invoice.query.filter_by(number=row[0]).first()
                         if invoice:
                             invoice.email += f' {row[1]}'
-                            invoice.place += f' {row[2]}'
+                            invoice.place += f' {int(row[2])}'
                             invoice.weight += f' {row[3]}'
                         else:
                             invoice = Invoice(number=row[0], email=row[1], place=row[2], weight=row[3])
