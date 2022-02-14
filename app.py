@@ -4,7 +4,7 @@ import pandas as pd
 from flask import request, flash, url_for, redirect
 from flask_login import login_required
 from flask_migrate import Migrate
-#from flask_script import Manager
+# from flask_script import Manager
 from flask_admin import Admin
 
 from flask_security import SQLAlchemyUserDatastore
@@ -15,7 +15,9 @@ from flask_app_init import app, db
 MIGRATION_DIR = os.path.join('admin', 'migrations')
 
 migrate = Migrate(app, db, directory=MIGRATION_DIR)
-#manager = Manager(app)
+
+
+# manager = Manager(app)
 
 
 @app.route('/upload', methods=["POST", "GET"])
@@ -31,9 +33,14 @@ def upload():
                 with open('table.csv', 'r', encoding='utf-8') as f:
                     for row in f:
                         row = row.split(';')
-                        invoice = Invoice(number=row[0], email=row[1])
-
-                        db.session.add(invoice)
+                        invoice = Invoice.query.filter(Invoice.number == row[0])
+                        if invoice:
+                            invoice.email += f' {row[1]}'
+                            invoice.place += f' {row[2]}'
+                            invoice.weight += f' {row[3]}'
+                        else:
+                            invoice = Invoice(number=row[0], email=row[1], place=row[2], weight=row[3])
+                            db.session.add(invoice)
                         db.session.commit()
                 flash("Файл загружен")
 

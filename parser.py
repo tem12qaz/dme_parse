@@ -16,7 +16,7 @@ url = 'https://business.dme.ru/cargo/'
 
 def driver_init():
     options = webdriver.ChromeOptions()
-    #options.binary_location = "/usr/bin/chromium-browser"
+    # options.binary_location = "/usr/bin/chromium-browser"
     options.add_argument("--headless")
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
@@ -31,10 +31,10 @@ def driver_init():
     options.add_experimental_option("prefs", prefs)
     driver = webdriver.Chrome(
         options=options,
-        #executable_path=CHROMEDRIVER_PATH
+        # executable_path=CHROMEDRIVER_PATH
     )
-    #display = Display(visible=0, size=(640, 480))
-    #display.start()
+    # display = Display(visible=0, size=(640, 480))
+    # display.start()
     return driver
 
 
@@ -83,13 +83,18 @@ def parse_all():
             try:
                 to, status, departure_time, place, weight = get_result(driver, invoice.number)
                 status = get_status(status, departure_time)
-                
+
                 print(to, status, departure_time, place, weight, flush=True)
 
                 if invoice.status == status:
                     break
 
-                send_mail(invoice.email.split(' '), status, (place, weight, to))
+                for i in range(len(invoice.email.split(' '))):
+                    send_mail(
+                        [invoice.email.split(' ')[i]],
+                        status,
+                        (invoice.place.split(' ')[i], invoice.weight.split(' ')[i], to)
+                    )
 
                 if status == 3:
                     db.session.delete(invoice)
@@ -107,11 +112,10 @@ def parse_all():
                 break
 
     driver.close()
-    #display.stop()
+    # display.stop()
 
 
 def parse_cycle():
     while True:
         parse_all()
         time.sleep(TIME_SLEEP)
-

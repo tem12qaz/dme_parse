@@ -27,5 +27,7 @@ class Invoice(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
     number = db.Column(db.String(16))
     email = db.Column(db.String(1024))
+    weight = db.Column(db.String(1024))
+    place = db.Column(db.String(1024))
     status = db.Column(db.Integer(), default=0)
 
