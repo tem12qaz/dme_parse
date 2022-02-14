@@ -33,7 +33,7 @@ def upload():
                 with open('table.csv', 'r', encoding='utf-8') as f:
                     for row in f:
                         row = row.split(';')
-                        invoice = Invoice.query.filter_by(number=row[0]).all()
+                        invoice = Invoice.query.filter_by(number=row[0]).first()
                         if invoice:
                             invoice.email += f' {row[1]}'
                             invoice.place += f' {row[2]}'
