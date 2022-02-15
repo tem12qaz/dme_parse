@@ -91,14 +91,20 @@ def parse_all():
                 if invoice.status == status:
                     break
 
-                for i in range(len(invoice.email.split(' '))):
-                    print('-------')
+                if invoice.place and invoice.weight:
+                    for i in range(len(invoice.email.split(' '))):
+                        print('-------')
+                        send_mail(
+                            [invoice.email.split(' ')[i]],
+                            status,
+                            (str(invoice.place.split(' ')[i]), str(invoice.weight.split(' ')[i]), to)
+                        )
+                else:
                     send_mail(
-                        [invoice.email.split(' ')[i]],
+                        [invoice.email.split(' ')],
                         status,
-                        (str(invoice.place.split(' ')[i]), str(invoice.weight.split(' ')[i]), to)
+                        (place, weight, to)
                     )
-
                 if status == 3:
                     db.session.delete(invoice)
                 else:
