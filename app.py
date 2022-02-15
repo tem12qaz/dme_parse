@@ -42,8 +42,8 @@ def upload():
                             invoice = Invoice(
                                 number=row[0],
                                 email=row[1],
-                                place=row[2].replace(".0", ""),
-                                weight=row[3]
+                                place=row[2].replace(".0", "") if len(row) > 2 else None,
+                                weight=row[3]if len(row) > 3 else None
                             )
 
                             db.session.add(invoice)
