@@ -101,7 +101,7 @@ def parse_all():
                         )
                 else:
                     send_mail(
-                        [invoice.email.split(' ')],
+                        invoice.email.split(' '),
                         status,
                         (place, weight, to)
                     )
