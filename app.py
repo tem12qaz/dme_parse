@@ -32,6 +32,7 @@ def upload():
                 df.to_csv("table.csv", index=None, header=True, sep=';', na_rep='-')
                 with open('table.csv', 'r', encoding='utf-8') as f:
                     for row in f:
+                        print(row)
                         row = row.split(';')
                         invoice = Invoice.query.filter_by(number=row[0]).first()
                         if invoice:
