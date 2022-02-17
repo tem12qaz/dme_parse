@@ -40,12 +40,18 @@ def upload():
                             invoice.place += f' {row[2].replace(".0", "")}'
                             invoice.weight += f' {row[3]}'
                         else:
-                            invoice = Invoice(
-                                number=row[0],
-                                email=row[1],
-                                place=row[2].replace(".0", "") if len(row) > 2 else None,
-                                weight=row[3]if len(row) > 3 else None
-                            )
+                            if len(row) < 3 or 'unnamed' in invoice.place.lower():
+                                invoice = Invoice(
+                                    number=row[0],
+                                    email=row[1]
+                                )
+                            else:
+                                invoice = Invoice(
+                                    number=row[0],
+                                    email=row[1],
+                                    place=row[2].replace(".0", ""),
+                                    weight=row[3]
+                                )
 
                             db.session.add(invoice)
                         db.session.commit()
