@@ -29,7 +29,7 @@ def upload():
             file.save(file.filename)
             try:
                 df = pd.read_excel(file.filename)
-                df.to_csv("table.csv", index=None, header=False, sep=';', na_rep='-')
+                df.to_csv("table.csv", index=None, header=True, sep=';', na_rep='-')
                 with open('table.csv', 'r', encoding='utf-8') as f:
                     for row in f:
                         print(row)
@@ -40,7 +40,7 @@ def upload():
                             invoice.place += f' {row[2].replace(".0", "")}'
                             invoice.weight += f' {row[3]}'
                         else:
-                            if len(row) < 3 or '-' == row[2]:
+                            if len(row) < 3 or 'unnamed' in row[2].lower() or '-' == row[2]:
                                 invoice = Invoice(
                                     number=row[0],
                                     email=row[1]
