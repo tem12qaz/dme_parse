@@ -40,7 +40,7 @@ def upload():
                             invoice.place += f' {row[2].replace(".0", "")}'
                             invoice.weight += f' {row[3]}'
                         else:
-                            if len(row) < 3 or 'unnamed' in invoice.place.lower():
+                            if len(row) < 3 or 'unnamed' in row[3].lower():
                                 invoice = Invoice(
                                     number=row[0],
                                     email=row[1]
