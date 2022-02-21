@@ -29,7 +29,7 @@ def upload():
             file.save(file.filename)
             try:
                 df = pd.read_excel(file.filename)
-                df.to_csv("table.csv", index=None, header=True, sep=';', na_rep='-')
+                df.to_csv("table.csv", index=None, header=False, sep=';', na_rep='-')
                 with open('table.csv', 'r', encoding='utf-8') as f:
                     for row in f:
                         print(row)
