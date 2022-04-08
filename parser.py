@@ -11,7 +11,8 @@ from flask_app_init import db
 from mail import send_mail
 from models import Invoice
 
-url = 'https://business.dme.ru/cargo/'
+dme_url = 'https://business.dme.ru/cargo/'
+vko_url = 'http://cargo.vnukovo.ru/e-cargo/tracking/'
 
 
 def driver_init():
@@ -38,7 +39,7 @@ def driver_init():
     return driver
 
 
-def get_status(status_text: str, departure_time: str):
+def dme_get_status(status_text: str, departure_time: str):
     if status_text == 'Комплектация на рейс/Груз принят к перевозке':
         if departure_time == ' ':
             return 1
@@ -50,8 +51,19 @@ def get_status(status_text: str, departure_time: str):
         return 0
 
 
-def get_result(driver: webdriver.Chrome, number: str):
-    driver.get(url)
+def vko_get_status(status_text: str):
+    if status_text == 'Принята на склад':
+        return  1
+    elif status_text == 'Груз в зоне комплектации':
+        return 2
+    elif status_text == 'Улетела':
+        return 3
+    else:
+        return 0
+
+
+def dme_get_result(driver: webdriver.Chrome, number: str):
+    driver.get(dme_url)
     driver.find_element(by=By.ID, value='NumberFirstPart').send_keys(number.split('-')[0])
     driver.find_element(by=By.ID, value='NumberSecondPart').send_keys(number.split('-')[1])
     driver.find_element(by=By.CLASS_NAME, value='w155').click()
@@ -72,6 +84,75 @@ def get_result(driver: webdriver.Chrome, number: str):
     return to, status, departure_time, place, weight
 
 
+def vko_get_result(driver: webdriver.Chrome, number: str):
+    driver.get(vko_url)
+    driver.find_element(by=By.XPATH, value="//input[@name='fPREAWB']").send_keys(number.split('-')[0])
+    driver.find_element(by=By.XPATH, value="//input[@name='fNUMAWB']]").send_keys(number.split('-')[1])
+    driver.find_element(by=By.XPATH, value="//input[@value='Показать информацию (Search)']]").click()
+
+    time.sleep(2)
+    driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
+    soup = bs4(driver.page_source, 'html.parser')
+    table = soup.find_all('table')[1]
+    params = table.find_all('tr')
+
+    if params[1].find_element('input')['value'] == 'RU':
+        status = params[1].find_all('input')[1]['value']
+        departure_time = params[1].find_all('input')[3]['value']
+        to = params[1].find_all('input')[4]['value']
+
+    else:
+        status = params[1].find_element('input')['value']
+        departure_time = ''
+        to = ''
+
+    params = soup.find_all('table')[5].find_all('tr')[2].find_all('input')
+
+    place = params[0]['value']
+    weight = params[1]['value']
+    print(to, status, departure_time, place, weight)
+
+    return to, status, departure_time, place, weight
+
+
+def parse(driver, invoice):
+    if invoice.airport == 'DME':
+        to, status, departure_time, place, weight = dme_get_result(driver, invoice.number)
+        status = dme_get_status(status, departure_time)
+    elif invoice.airport == 'VKO':
+        to, status, departure_time, place, weight = vko_get_result(driver, invoice.number)
+        status = vko_get_status(status)
+
+    else:
+        return
+
+    print(to, status, departure_time, place, weight, flush=True)
+
+    if invoice.status == status:
+        return
+
+    if invoice.place and invoice.weight:
+        for i in range(len(invoice.email.split(' '))):
+            print('-------')
+            send_mail(
+                [invoice.email.split(' ')[i]],
+                status,
+                (str(invoice.place.split(' ')[i]), str(invoice.weight.split(' ')[i]), to)
+            )
+    else:
+        send_mail(
+            invoice.email.split(' '),
+            status,
+            (place, weight, to)
+        )
+    if status == 3:
+        db.session.delete(invoice)
+    else:
+        invoice.status = status
+
+    db.session.commit()
+
+
 def parse_all():
     invoices = Invoice.query.all()
     driver = driver_init()
@@ -81,36 +162,10 @@ def parse_all():
         time.sleep(20)
         exc = 0
         while exc < 2:
-            print(invoice.number, flush=True)
+            print(invoice.number, invoice.airport, flush=True)
             try:
-                to, status, departure_time, place, weight = get_result(driver, invoice.number)
-                status = get_status(status, departure_time)
+                parse(driver, invoice)
 
-                print(to, status, departure_time, place, weight, flush=True)
-
-                if invoice.status == status:
-                    break
-
-                if invoice.place and invoice.weight:
-                    for i in range(len(invoice.email.split(' '))):
-                        print('-------')
-                        send_mail(
-                            [invoice.email.split(' ')[i]],
-                            status,
-                            (str(invoice.place.split(' ')[i]), str(invoice.weight.split(' ')[i]), to)
-                        )
-                else:
-                    send_mail(
-                        invoice.email.split(' '),
-                        status,
-                        (place, weight, to)
-                    )
-                if status == 3:
-                    db.session.delete(invoice)
-                else:
-                    invoice.status = status
-
-                db.session.commit()
             except Exception as e:
                 print(traceback.format_exc(), flush=True)
 

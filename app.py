@@ -34,23 +34,25 @@ def upload():
                     for row in f:
                         print(row)
                         row = row.split(';')
-                        invoice = Invoice.query.filter_by(number=row[0]).first()
+                        invoice = Invoice.query.filter_by(number=row[1]).first()
                         if invoice:
-                            invoice.email += f' {row[1]}'
-                            invoice.place += f' {row[2].replace(".0", "")}'
-                            invoice.weight += f' {row[3]}'
+                            invoice.email += f' {row[2]}'
+                            invoice.place += f' {row[3].replace(".0", "")}'
+                            invoice.weight += f' {row[4]}'
                         else:
-                            if len(row) < 3 or 'unnamed' in row[2].lower() or '-' == row[2]:
+                            if len(row) < 4 or 'unnamed' in row[3].lower() or '-' == row[3]:
                                 invoice = Invoice(
-                                    number=row[0],
-                                    email=row[1]
+                                    airport=row[0],
+                                    number=row[1],
+                                    email=row[2]
                                 )
                             else:
                                 invoice = Invoice(
-                                    number=row[0],
-                                    email=row[1],
-                                    place=row[2].replace(".0", ""),
-                                    weight=row[3]
+                                    airport=row[0],
+                                    number=row[1],
+                                    email=row[2],
+                                    place=row[3].replace(".0", ""),
+                                    weight=row[4]
                                 )
 
                             db.session.add(invoice)

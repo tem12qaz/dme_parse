@@ -2,11 +2,17 @@
 from flask_security import UserMixin, RoleMixin
 
 from flask_app_init import db
+import enum
 
 roles_users = db.Table('roles_users',
                        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
                        db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
                        )
+
+
+class Airport(enum.Enum):
+    DME = "DME"
+    VKO = "VKO"
 
 
 class User(db.Model, UserMixin):
@@ -30,4 +36,6 @@ class Invoice(db.Model):
     weight = db.Column(db.String(1024))
     place = db.Column(db.String(1024))
     status = db.Column(db.Integer(), default=0)
+    airport = db.Column(enum.Enum(Airport))
+
 
