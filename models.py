@@ -1,6 +1,8 @@
 
 from flask_security import UserMixin, RoleMixin
-
+from alembic import op
+import sqlalchemy as sa
+from sqlalchemy.dialects import postgresql
 from flask_app_init import db
 import enum
 
@@ -31,11 +33,21 @@ class Role(db.Model, RoleMixin):
 
 class Invoice(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    number = db.Column(db.String(16))
+    number = db.Column(db.String(16), nullable=False)
     email = db.Column(db.String(1024))
     weight = db.Column(db.String(1024))
     place = db.Column(db.String(1024))
     status = db.Column(db.Integer(), default=0)
-    airport = db.Column(db.Enum(airport))
+    # airport = db.Column(db.Enum(airport), nullable=False)
+
+
+def create_airport_enum():
+    airport_ = postgresql.ENUM('DME', 'VKO', name='airport')
+    airport_.create(op.get_bind())
+    op.add_column('invoice', sa.Column('airport', airport_))
+
+
+if __name__ == '__main__':
+    create_airport_enum()
 
 
