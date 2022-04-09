@@ -11,6 +11,7 @@ roles_users = db.Table('roles_users',
 
 
 class Airport(enum.Enum):
+    __tablename__ = 'airport'
     DME = "DME"
     VKO = "VKO"
 
