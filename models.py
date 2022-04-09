@@ -12,9 +12,13 @@ roles_users = db.Table('roles_users',
                        )
 
 
-class airport(enum.Enum):
-    DME = "DME"
-    VKO = "VKO"
+class Airport(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(4))
+    invoices = db.relationship('Invoice', backref='airport', lazy=True)
+
+    def __repr__(self):
+        return self.name
 
 
 class User(db.Model, UserMixin):
@@ -38,16 +42,6 @@ class Invoice(db.Model):
     weight = db.Column(db.String(1024))
     place = db.Column(db.String(1024))
     status = db.Column(db.Integer(), default=0)
-    # airport = db.Column(db.Enum(airport), nullable=False)
-
-
-def create_airport_enum():
-    airport_ = postgresql.ENUM('DME', 'VKO', name='airport')
-    airport_.create(op.get_bind())
-    op.add_column('invoice', sa.Column('airport', airport_))
-
-
-if __name__ == '__main__':
-    create_airport_enum()
+    airport_id = db.Column(db.Integer, db.ForeignKey('airport.id'), nullable=False)
 
 
