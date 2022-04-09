@@ -12,13 +12,13 @@ roles_users = db.Table('roles_users',
                        )
 
 
-class Airport(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(4))
-    invoices = db.relationship('Invoice', backref='airport', lazy=True)
-
-    def __repr__(self):
-        return self.name
+# class Airport(db.Model):
+#     id = db.Column(db.Integer(), primary_key=True)
+#     name = db.Column(db.String(4))
+#     # invoices = db.relationship('Invoice', backref='airport', lazy=True)
+#
+#     def __repr__(self):
+#         return self.name
 
 
 class User(db.Model, UserMixin):
@@ -42,6 +42,6 @@ class Invoice(db.Model):
     weight = db.Column(db.String(1024))
     place = db.Column(db.String(1024))
     status = db.Column(db.Integer(), default=0)
-    airport_id = db.Column(db.Integer, db.ForeignKey('airport.id'), nullable=False)
+    # airport_id = db.Column(db.Integer, db.ForeignKey('airport.id'), nullable=False)
 
 
