@@ -10,8 +10,7 @@ roles_users = db.Table('roles_users',
                        )
 
 
-class Airport(enum.Enum):
-    __tablename__ = 'airport'
+class airport(enum.Enum):
     DME = "DME"
     VKO = "VKO"
 
@@ -37,6 +36,6 @@ class Invoice(db.Model):
     weight = db.Column(db.String(1024))
     place = db.Column(db.String(1024))
     status = db.Column(db.Integer(), default=0)
-    airport = db.Column(db.Enum(Airport))
+    airport = db.Column(db.Enum(airport))
 
 
