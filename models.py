@@ -36,6 +36,6 @@ class Invoice(db.Model):
     weight = db.Column(db.String(1024))
     place = db.Column(db.String(1024))
     status = db.Column(db.Integer(), default=0)
-    airport = db.Column(enum.Enum(Airport))
+    airport = db.Column(db.Enum(Airport))
 
 
