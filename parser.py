@@ -116,10 +116,10 @@ def vko_get_result(driver: webdriver.Chrome, number: str):
 
 
 def parse(driver, invoice):
-    if invoice.airport == 'DME':
+    if invoice.airport.name == 'DME':
         to, status, departure_time, place, weight = dme_get_result(driver, invoice.number)
         status = dme_get_status(status, departure_time)
-    elif invoice.airport == 'VKO':
+    elif invoice.airport.name == 'VKO':
         to, status, departure_time, place, weight = vko_get_result(driver, invoice.number)
         status = vko_get_status(status)
 
