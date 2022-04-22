@@ -93,8 +93,8 @@ def vko_get_result(driver: webdriver.Chrome, number: str):
         driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
 
         driver.find_element(by=By.XPATH, value="//input[@name='fPREAWB']").send_keys(number.split('-')[0])
-        driver.find_element(by=By.XPATH, value="//input[@name='fNUMAWB']]").send_keys(number.split('-')[1])
-        driver.find_element(by=By.XPATH, value="//input[@value='Показать информацию (Search)']]").click()
+        driver.find_element(by=By.XPATH, value="//input[@name='fNUMAWB']").send_keys(number.split('-')[1])
+        driver.find_element(by=By.XPATH, value="//input[@value='Показать информацию (Search)']").click()
 
         time.sleep(2)
         soup = bs4(driver.page_source, 'html.parser')
