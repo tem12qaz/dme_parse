@@ -100,9 +100,6 @@ def vko_get_result(driver: webdriver.Chrome, number: str):
         soup = bs4(driver.page_source, 'html.parser')
         table = soup.find_all('table')[1]
         params = table.find_all('tr')
-        for param in params:
-            print(param)
-            print('-----------------------------')
 
         if params[1].find('input')['value'] == 'RU':
             status = params[1].find_all('input')[1]['value']
