@@ -63,54 +63,60 @@ def vko_get_status(status_text: str):
 
 
 def dme_get_result(driver: webdriver.Chrome, number: str):
-    driver.get(dme_url)
-    driver.find_element(by=By.ID, value='NumberFirstPart').send_keys(number.split('-')[0])
-    driver.find_element(by=By.ID, value='NumberSecondPart').send_keys(number.split('-')[1])
-    driver.find_element(by=By.CLASS_NAME, value='w155').click()
+    try:
+        driver.get(dme_url)
+        driver.find_element(by=By.ID, value='NumberFirstPart').send_keys(number.split('-')[0])
+        driver.find_element(by=By.ID, value='NumberSecondPart').send_keys(number.split('-')[1])
+        driver.find_element(by=By.CLASS_NAME, value='w155').click()
 
-    time.sleep(2)
+        time.sleep(2)
 
-    soup = bs4(driver.page_source, 'html.parser')
-    table = soup.find('table', class_='table_style_3 table_style_cargo')
-    params = table.find_all('td')
+        soup = bs4(driver.page_source, 'html.parser')
+        table = soup.find('table', class_='table_style_3 table_style_cargo')
+        params = table.find_all('td')
 
-    to = params[1].text
-    status = params[2].text
-    departure_time = params[3].text
-    place = params[5].text
-    weight = params[6].text
-    print(to, status, departure_time, place, weight)
+        to = params[1].text
+        status = params[2].text
+        departure_time = params[3].text
+        place = params[5].text
+        weight = params[6].text
+        print(to, status, departure_time, place, weight)
+    except:
+        return 0, 0, 0, 0, 0
 
     return to, status, departure_time, place, weight
 
 
 def vko_get_result(driver: webdriver.Chrome, number: str):
-    driver.get(vko_url)
-    driver.find_element(by=By.XPATH, value="//input[@name='fPREAWB']").send_keys(number.split('-')[0])
-    driver.find_element(by=By.XPATH, value="//input[@name='fNUMAWB']]").send_keys(number.split('-')[1])
-    driver.find_element(by=By.XPATH, value="//input[@value='Показать информацию (Search)']]").click()
+    try:
+        driver.get(vko_url)
+        driver.find_element(by=By.XPATH, value="//input[@name='fPREAWB']").send_keys(number.split('-')[0])
+        driver.find_element(by=By.XPATH, value="//input[@name='fNUMAWB']]").send_keys(number.split('-')[1])
+        driver.find_element(by=By.XPATH, value="//input[@value='Показать информацию (Search)']]").click()
 
-    time.sleep(2)
-    driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
-    soup = bs4(driver.page_source, 'html.parser')
-    table = soup.find_all('table')[1]
-    params = table.find_all('tr')
+        time.sleep(2)
+        driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
+        soup = bs4(driver.page_source, 'html.parser')
+        table = soup.find_all('table')[1]
+        params = table.find_all('tr')
 
-    if params[1].find_element('input')['value'] == 'RU':
-        status = params[1].find_all('input')[1]['value']
-        departure_time = params[1].find_all('input')[3]['value']
-        to = params[1].find_all('input')[4]['value']
+        if params[1].find_element('input')['value'] == 'RU':
+            status = params[1].find_all('input')[1]['value']
+            departure_time = params[1].find_all('input')[3]['value']
+            to = params[1].find_all('input')[4]['value']
 
-    else:
-        status = params[1].find_element('input')['value']
-        departure_time = ''
-        to = ''
+        else:
+            status = params[1].find_element('input')['value']
+            departure_time = ''
+            to = ''
 
-    params = soup.find_all('table')[5].find_all('tr')[2].find_all('input')
+        params = soup.find_all('table')[5].find_all('tr')[2].find_all('input')
 
-    place = params[0]['value']
-    weight = params[1]['value']
-    print(to, status, departure_time, place, weight)
+        place = params[0]['value']
+        weight = params[1]['value']
+        print(to, status, departure_time, place, weight)
+    except:
+        return 0, 0, 0, 0, 0
 
     return to, status, departure_time, place, weight
 
