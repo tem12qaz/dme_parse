@@ -116,6 +116,7 @@ def vko_get_result(driver: webdriver.Chrome, number: str):
         weight = params[1]['value']
         print(to, status, departure_time, place, weight)
     except:
+        print(traceback.format_exc())
         return 0, 0, 0, 0, 0
 
     return to, status, departure_time, place, weight
