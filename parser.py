@@ -104,7 +104,7 @@ def vko_get_result(driver: webdriver.Chrome, number: str):
             print(param)
             print('-----------------------------')
 
-        if params[1].find_element('input')['value'] == 'RU':
+        if params[1].find('input')['value'] == 'RU':
             status = params[1].find_all('input')[1]['value']
             departure_time = params[1].find_all('input')[3]['value']
             to = params[1].find_all('input')[4]['value']
