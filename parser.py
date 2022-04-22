@@ -90,12 +90,13 @@ def dme_get_result(driver: webdriver.Chrome, number: str):
 def vko_get_result(driver: webdriver.Chrome, number: str):
     try:
         driver.get(vko_url)
+        driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
+
         driver.find_element(by=By.XPATH, value="//input[@name='fPREAWB']").send_keys(number.split('-')[0])
         driver.find_element(by=By.XPATH, value="//input[@name='fNUMAWB']]").send_keys(number.split('-')[1])
         driver.find_element(by=By.XPATH, value="//input[@value='Показать информацию (Search)']]").click()
 
         time.sleep(2)
-        driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
         soup = bs4(driver.page_source, 'html.parser')
         table = soup.find_all('table')[1]
         params = table.find_all('tr')
