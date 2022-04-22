@@ -52,11 +52,11 @@ def dme_get_status(status_text: str, departure_time: str):
 
 
 def vko_get_status(status_text: str, _):
-    if status_text == 'Принята на склад':
+    if 'Принята на склад' in status_text:
         return 1
-    elif status_text == 'Груз в зоне комплектации':
+    elif 'Груз в зоне комплектации in status_text:' in status_text:
         return 2
-    elif status_text == 'Улетела':
+    elif 'Улетела' in status_text:
         return 3
     else:
         return 0
@@ -100,9 +100,6 @@ def vko_get_result(driver: webdriver.Chrome, number: str):
         soup = bs4(driver.page_source, 'html.parser')
         table = soup.find_all('table')[1]
         params = table.find_all('tr')
-        for param in params:
-            print(param)
-            print('-----------------------------')
 
         if params[1].find('input')['value'] == 'RU':
             status = params[1].find_all('input')[1]['value']
