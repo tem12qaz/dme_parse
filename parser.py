@@ -102,6 +102,7 @@ def vko_get_result(driver: webdriver.Chrome, number: str):
         params = table.find_all('tr')
         for param in params:
             print(param)
+            print('-----------------------------')
 
         if params[1].find_element('input')['value'] == 'RU':
             status = params[1].find_all('input')[1]['value']
