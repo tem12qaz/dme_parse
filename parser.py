@@ -141,7 +141,7 @@ def parse(driver, invoice):
     if invoice.status == status:
         return
 
-    if invoice.place and invoice.weight:
+    if invoice.place and invoice.weight and invoice.place != '-' and invoice.weight != '-':
         for i in range(len(invoice.email.split(' '))):
             print('-------')
             send_mail(
