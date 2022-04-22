@@ -51,9 +51,9 @@ def dme_get_status(status_text: str, departure_time: str):
         return 0
 
 
-def vko_get_status(status_text: str):
+def vko_get_status(status_text: str, _):
     if status_text == 'Принята на склад':
-        return  1
+        return 1
     elif status_text == 'Груз в зоне комплектации':
         return 2
     elif status_text == 'Улетела':
