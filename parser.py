@@ -128,9 +128,6 @@ def parse(driver, invoice):
         if status != 0:
             break
 
-    else:
-        return
-
     print(to, status, departure_time, place, weight, flush=True)
 
     if invoice.status == status:
