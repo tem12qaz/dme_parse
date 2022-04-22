@@ -164,7 +164,7 @@ def parse_all():
         time.sleep(20)
         exc = 0
         while exc < 2:
-            print(invoice.number, invoice.airport, flush=True)
+            print(invoice.number, flush=True)
             try:
                 parse(driver, invoice)
 
