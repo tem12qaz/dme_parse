@@ -52,9 +52,10 @@ def dme_get_status(status_text: str, departure_time: str):
 
 
 def vko_get_status(status_text: str, _):
+    print(status_text)
     if 'Принята на склад' in status_text:
         return 1
-    elif 'Груз в зоне комплектации in status_text:' in status_text:
+    elif 'Груз в зоне комплектации' in status_text:
         return 2
     elif 'Улетела' in status_text:
         return 3
@@ -75,7 +76,7 @@ def dme_get_result(driver: webdriver.Chrome, number: str):
         table = soup.find('table', class_='table_style_3 table_style_cargo')
         params = table.find_all('td')
 
-        to = params[1].text
+        to = params[1].text.split('->')[-1]
         status = params[2].text
         departure_time = params[3].text
         place = params[5].text
@@ -92,24 +93,25 @@ def vko_get_result(driver: webdriver.Chrome, number: str):
         driver.get(vko_url)
         driver.switch_to.frame(driver.find_element(by=By.TAG_NAME, value='iframe'))
 
-        driver.find_element(by=By.XPATH, value="//input[@name='fPREAWB']").send_keys(number.split('-')[0])
-        driver.find_element(by=By.XPATH, value="//input[@name='fNUMAWB']").send_keys(number.split('-')[1])
+        driver.find_element(by=By.XPATH, value="//input[@name='fPREAWB']").send_keys(number.split('-')[0].replace(' ', ''))
+        driver.find_element(by=By.XPATH, value="//input[@name='fNUMAWB']").send_keys(number.split('-')[1].replace(' ', ''))
         driver.find_element(by=By.XPATH, value="//input[@value='Показать информацию (Search)']").click()
 
         time.sleep(2)
         soup = bs4(driver.page_source, 'html.parser')
         table = soup.find_all('table')[1]
         params = table.find_all('tr')
-
+        #driver.save_screenshot('eee.png')
+        print(params[1])
         if params[1].find('input')['value'] == 'RU':
             status = params[1].find_all('input')[1]['value']
             departure_time = params[1].find_all('input')[3]['value']
             to = params[1].find_all('input')[4]['value']
 
         else:
-            status = params[1].find_element('input')['value']
+            status = params[1].find('input')['value']
             departure_time = ''
-            to = ''
+            to = soup.find_all('table')[4].find_all('td')[3].find('input')['value']
 
         params = soup.find_all('table')[5].find_all('tr')[2].find_all('input')
 
