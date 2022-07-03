@@ -4,16 +4,20 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.utils import formatdate
 
-
 from config import EMAIL_ADDRESS, EMAIL_HOST, EMAIL_PASSWORD, EMAIL_SUBJECT, \
     EMAIL_PORT
-from text import status_messages, TEXT_2_1, TEXT_2_2, SIGN, SIGN_2, HTML
+from text import status_messages, TEXT_2_1, TEXT_2_2, SIGN, SIGN_2, HTML, status_messages_with_names
 
 
 def send_mail(email_to, status, data, email_from=EMAIL_ADDRESS, subject=EMAIL_SUBJECT):
     email_to = [EMAIL_ADDRESS] + email_to
 
-    text = status_messages[status].format(place=data[0], weight=data[1], to=data[2])
+
+    if len(data) == 5:
+        text = status_messages_with_names[status].format(place=data[0], weight=data[1], to=data[2],
+                                                         sender=data[3], recipient=data[4])
+    else:
+        text = status_messages[status].format(place=data[0], weight=data[1], to=data[2])
 
     if status == 1 or status == 2:
         text_2 = TEXT_2_1
