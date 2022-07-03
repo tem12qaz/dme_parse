@@ -42,6 +42,9 @@ class Invoice(db.Model):
     weight = db.Column(db.String(1024))
     place = db.Column(db.String(1024))
     status = db.Column(db.Integer(), default=0)
+    sender = db.Column(db.String(1024))
+    recipient = db.Column(db.String(1024))
+
     # airport_id = db.Column(db.Integer, db.ForeignKey('airport.id'), nullable=False)
 
 

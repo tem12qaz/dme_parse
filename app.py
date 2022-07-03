@@ -39,6 +39,8 @@ def upload():
                             invoice.email += f' {row[1]}'
                             invoice.place += f' {row[2].replace(".0", "")}'
                             invoice.weight += f' {row[3]}'
+                            invoice.recipient += f';{row[5]}'
+                            invoice.sender += f';{row[4]}'
                         else:
                             if len(row) < 4 or 'unnamed' in row[3].lower() or '-' == row[3]:
                                 invoice = Invoice(
@@ -50,7 +52,9 @@ def upload():
                                     number=row[0],
                                     email=row[1],
                                     place=row[2].replace(".0", ""),
-                                    weight=row[3]
+                                    weight=row[3],
+                                    sender=row[4],
+                                    recipient=row[5]
                                 )
 
                             db.session.add(invoice)

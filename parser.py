@@ -147,14 +147,22 @@ def parse(driver, invoice):
             send_mail(
                 [invoice.email.split(' ')[i]],
                 status,
-                (str(invoice.place.split(' ')[i]), str(invoice.weight.split(' ')[i]), to)
+                (str(invoice.place.split(' ')[i]), str(invoice.weight.split(' ')[i]), to,
+                 str(invoice.sender.split(';')[i]), str(invoice.recipient.split(';')[i]))
             )
     else:
-        send_mail(
-            invoice.email.split(' '),
-            status,
-            (place, weight, to)
-        )
+        if invoice.recipient and invoice.sender:
+            send_mail(
+                invoice.email.split(' '),
+                status,
+                (place, weight, to, invoice.sender, invoice.recipient)
+            )
+        else:
+            send_mail(
+                invoice.email.split(' '),
+                status,
+                (place, weight, to, None, None)
+            )
     if status == 3:
         db.session.delete(invoice)
     else:
