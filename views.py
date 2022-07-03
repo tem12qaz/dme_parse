@@ -21,9 +21,9 @@ class HomeAdminView(AdminMixin, AdminIndexView):
 
 
 class InvoiceView(AdminMixin, ModelView):
-    column_list = ('id', 'number', 'email', 'place', 'weight', 'status')
+    column_list = ('id', 'number', 'email', 'place', 'weight', 'status', 'sender', 'recipient')
 
-    form_columns = ('number', 'email', 'place', 'weight')
+    form_columns = ('number', 'email', 'place', 'weight', 'sender', 'recipient')
 
 
 class LogoutView(AdminMixin, BaseView):
