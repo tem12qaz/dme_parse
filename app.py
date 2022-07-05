@@ -43,10 +43,18 @@ def upload():
                             invoice.sender += f';{row[4]}'
                         else:
                             if len(row) < 4 or 'unnamed' in row[3].lower() or '-' == row[3]:
-                                invoice = Invoice(
-                                    number=row[0],
-                                    email=row[1]
-                                )
+                                if 'unnamed' in row[5].lower() or '-' == row[5]:
+                                    invoice = Invoice(
+                                        number=row[0],
+                                        email=row[1]
+                                    )
+                                else:
+                                    invoice = Invoice(
+                                        number=row[0],
+                                        email=row[1],
+                                        sender=row[4],
+                                        recipient=row[5]
+                                    )
                             else:
                                 invoice = Invoice(
                                     number=row[0],

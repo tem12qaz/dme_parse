@@ -146,12 +146,19 @@ def parse(driver, invoice):
     if invoice.place and invoice.weight and invoice.place != '-' and invoice.weight != '-':
         for i in range(len(invoice.email.split(' '))):
             print('-------')
-            send_mail(
-                [invoice.email.split(' ')[i]],
-                status,
-                (str(invoice.place.split(' ')[i]), str(invoice.weight.split(' ')[i]), to,
-                 str(invoice.sender.split(';')[i]), str(invoice.recipient.split(';')[i]))
-            )
+            if invoice.recipient:
+                send_mail(
+                    [invoice.email.split(' ')[i]],
+                    status,
+                    (str(invoice.place.split(' ')[i]), str(invoice.weight.split(' ')[i]), to,
+                     str(invoice.sender.split(';')[i]), str(invoice.recipient.split(';')[i]))
+                )
+            else:
+                send_mail(
+                    [invoice.email.split(' ')[i]],
+                    status,
+                    (str(invoice.place.split(' ')[i]), str(invoice.weight.split(' ')[i]), to)
+                )
     else:
         if invoice.recipient and invoice.sender:
             send_mail(
@@ -163,7 +170,7 @@ def parse(driver, invoice):
             send_mail(
                 invoice.email.split(' '),
                 status,
-                (place, weight, to, None, None)
+                (place, weight, to)
             )
     if status == 3:
         db.session.delete(invoice)
